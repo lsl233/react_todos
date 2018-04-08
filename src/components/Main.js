@@ -4,7 +4,7 @@ import TodoItem from './TodoItem';
 
 class Main extends Component {
   render () {
-    const { list, changeTodoStatus } = this.props;
+    const { list, changeTodoStatus, removeTodo } = this.props;
     return (
       <main className="main">
         <input
@@ -13,7 +13,17 @@ class Main extends Component {
         />
         <ul className="todo-list">
           {
-            list.map((item) => <TodoItem item={item} changeTodoStatus={changeTodoStatus} />)
+            list.map((item, index) => {
+              return (
+                <TodoItem
+                  key={index.toString()}
+                  item={item}
+                  index={index}
+                  removeTodo={removeTodo}
+                  changeTodoStatus={changeTodoStatus}
+                />
+              )
+            })
           }
         </ul>
       </main>

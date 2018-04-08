@@ -13,6 +13,7 @@ class App extends Component {
     if (event.keyCode !== 13) return;
     const { newTodoTitle } = this.state;
     this.props.addTodo(newTodoTitle);
+    this.setState({ newTodoTitle: '' });
   }
 
   render () {

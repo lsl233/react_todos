@@ -21,9 +21,16 @@ class App extends Component {
     this.setState({ list })
   }
 
+  removeTodo = (index) => {
+    const { list } = this.state;
+    list.splice(index, 1);
+    this.setState({ list })
+  }
+
   changeTodoStatus = (type, index, status) => {
     const { list } = this.state;
     list[index][type] = status;
+    console.log(type, index, status)
     this.setState({ list });
   }
 
@@ -32,7 +39,11 @@ class App extends Component {
     return (
       <section className="App todoapp">
         <Header addTodo={this.addTodo} />
-        <Main list={list} changeTodoStatus={this.changeTodoStatus} />
+        <Main
+          list={list}
+          changeTodoStatus={this.changeTodoStatus}
+          removeTodo={this.removeTodo}
+        />
       </section>
     );
   }
