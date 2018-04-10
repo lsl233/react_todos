@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 
+import store from './utils/store';
+
 import Header from './components/Header';
 import Main from './components/Main';
 import Footer from './components/Footer';
 
 import './App.css';
 import 'todomvc-app-css/index.css';
+
+const todoStore = new store('todolist');
 
 class App extends Component {
 
@@ -15,7 +19,7 @@ class App extends Component {
   }
 
   componentDidMount () {
-    // this.filterList(this.state.type)
+    this.setState({ list: (todoStore.get() || []) });
   }
 
   addTodo = (title) => {
@@ -25,18 +29,28 @@ class App extends Component {
       completed: false,
       active: true,
     });
+    todoStore.add(list);
     this.setState({ list })
   }
 
   removeTodo = (index) => {
     const { list } = this.state;
     list.splice(index, 1);
+    todoStore.add(list);
     this.setState({ list })
+  }
+
+  removeCompleted = () => {
+    const { list } = this.state;
+    const newList = list.filter((item) => !item.completed);
+    todoStore.add(newList);
+    this.setState({ list: newList });
   }
 
   changeTodoStatus = (type, index, status) => {
     const { list } = this.state;
     list[index][type] = status;
+    todoStore.add(list);
     this.setState({ list });
   }
 
@@ -44,33 +58,33 @@ class App extends Component {
     this.setState({ type });
   }
 
-  filterList = (type) => {
-    const { list } = this.state;
-    return list.filter((item) => {
-      switch (type) {
-        case 'active':
-          return !item.completed;
-        case 'completed':
-          return item.completed;
-        default:
-          return true;
-      }
-    })
+  filterTodo = () => {
+    const { list, type } = this.state;
+    switch (type) {
+      case 'active':
+        return list.filter((item) => !item.completed);
+      case 'completed':
+        return list.filter((item) => item.completed);
+      default:
+        return list
+    }
   }
 
   render() {
-    const { list, type } = this.state;
+    const { type } = this.state;
+    const showList = this.filterTodo()
     return (
       <section className="App todoapp">
         <Header addTodo={this.addTodo} />
         <Main
-          type={type}
-          list={list}
+          list={showList}
           changeTodoStatus={this.changeTodoStatus}
           removeTodo={this.removeTodo}
         />
         <Footer
           type={type}
+          total={showList.length}
+          removeCompleted={this.removeCompleted}
           changeType={this.changeType}
         />
       </section>

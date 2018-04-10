@@ -7,12 +7,17 @@ class Footer extends Component {
     this.props.changeType(type);
   }
 
+  handleRemoveCompleted = (event) => {
+    event.preventDefault();
+    this.props.removeCompleted();
+  }
+
   render () {
-    const { type } = this.props;
+    const { type, total } = this.props;
     return (
       <footer className="footer">
         <span className="todo-count">
-            <strong>1</strong> left
+            <strong>{total}</strong> left
         </span>
         <ul className="filters">
           <li><a
@@ -29,6 +34,7 @@ class Footer extends Component {
             onClick={(event) => this.handleChangeType(event, 'completed')}>Completed</a></li>
         </ul>
         <button
+          onClick={this.handleRemoveCompleted}
           className="clear-completed">
           Clear completed
         </button>
