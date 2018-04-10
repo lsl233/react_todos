@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 class TodoItem extends Component {
+
   handleChangeTodoStatus = (event, type) => {
     const { index, changeTodoStatus } = this.props;
     changeTodoStatus(type, index, event.target.checked);
@@ -14,7 +15,7 @@ class TodoItem extends Component {
   render () {
     const { item } = this.props;
     return (
-      <li>
+      <li className={item.completed && 'completed'}>
         <div className="view">
           <input
             className="toggle"
